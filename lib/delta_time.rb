@@ -14,4 +14,8 @@ module DeltaTime
   def delta
     @delta_time
   end
+
+  def delta_since(milliseconds)
+    [@last_update - milliseconds, 0].max
+  end
 end
