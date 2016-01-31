@@ -1,0 +1,12 @@
+GEM
+  specs:
+    gosu (0.10.5)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  gosu (= 0.10.5)
+
+BUNDLED WITH
+   1.10.6
