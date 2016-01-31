@@ -30,15 +30,29 @@ module States
   end
 
   def states
-    self.class.instance_variable_get(:@registered_states).to_a
+    register_states.to_a
   end
 
   def state
-    self.class.instance_variable_get(:@current_state)
+    current_state
   end
 
   def state=(new_state)
-    raise StateError, "State #{new_state} not registered" unless self.class.instance_variable_get(:@registered_states).include?(new_state)
+    raise StateError, "State #{new_state} not registered" unless registered_states.include?(new_state)
+    self.current_state = new_state
+  end
+
+  private
+
+  def registered_states
+    self.class.instance_variable_get(:@registered_states)
+  end
+
+  def current_state
+    self.class.instance_variable_get(:@current_state)
+  end
+
+  def current_state=(new_state)
     self.class.instance_variable_set(:@current_state, new_state)
   end
 end
