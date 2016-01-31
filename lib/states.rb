@@ -30,7 +30,7 @@ module States
   end
 
   def states
-    register_states.to_a
+    registered_states.to_a
   end
 
   def state
