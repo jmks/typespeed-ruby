@@ -14,6 +14,7 @@ class Typespeed < Gosu::Window
 
     @input = UserInput.new(self)
     @ref = Referee.new(@words, @input)
+    @scoreboard = Scoreboard.new(@ref)
   end
 
   def update
@@ -42,6 +43,8 @@ class Typespeed < Gosu::Window
       @words << word
       @last_word_at = Gosu.milliseconds
     end
+
+    @scoreboard.update
   end
 
   def draw
@@ -51,6 +54,7 @@ class Typespeed < Gosu::Window
     @word.draw_rot(width / 2, 120, 0, 0) if @word
 
     @words.map(&:draw)
+    @scoreboard.draw
   end
 
   def button_down id
