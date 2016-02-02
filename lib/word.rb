@@ -12,6 +12,7 @@ class Word
     @max_x = game.width
     @speed = speed
     @color = Gosu::Color::GREEN
+    @user_entered = false
 
     build!
   end
@@ -19,11 +20,19 @@ class Word
   def update
     change_color!
     @x += speed * game.delta
-    offscreen?
+    offscreen? || user_entered?
   end
 
   def draw
     @display.draw(value, @x, @y, 0, 1, 1, @color)
+  end
+
+  def user_entered!
+    @user_entered = true
+  end
+
+  def user_entered?
+    @user_entered
   end
 
   private

@@ -13,6 +13,7 @@ class Typespeed < Gosu::Window
     @words = []
 
     @input = UserInput.new(self)
+    @ref = Referee.new(@words, @input)
   end
 
   def update
@@ -55,7 +56,7 @@ class Typespeed < Gosu::Window
   def button_down id
     case id
     when Gosu::KbReturn
-      @input.submit!
+      @ref.score!
       puts "User submitted: #{@input.last_submission}"
     end
   end

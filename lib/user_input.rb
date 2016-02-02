@@ -10,6 +10,7 @@ class UserInput
   def submit!
     @last_submission = @input.text
     game.text_input  = @input = build_input
+    @last_submission
   end
 
   private
