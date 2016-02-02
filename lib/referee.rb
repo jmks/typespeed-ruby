@@ -7,7 +7,10 @@ class Referee
 
     @submissions = 0
     @correct     = 0
-    @incorrect   = 0
+  end
+
+  def incorrect
+    @submissions - @correct
   end
 
   def score!
@@ -20,7 +23,6 @@ class Referee
       @correct += 1
       true
     else
-      @incorrect += 1
       false
     end
   end
