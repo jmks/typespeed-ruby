@@ -1,5 +1,5 @@
 class Referee
-  attr_reader :submissions, :correct, :incorrect
+  attr_reader :submissions, :correct, :incorrect, :misses
 
   def initialize(words, user_input)
     @words = words
@@ -7,6 +7,7 @@ class Referee
 
     @submissions = 0
     @correct     = 0
+    @misses      = 0
   end
 
   def incorrect
@@ -25,5 +26,9 @@ class Referee
     else
       false
     end
+  end
+
+  def mark_miss!
+    @misses += 1
   end
 end

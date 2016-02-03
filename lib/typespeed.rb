@@ -43,7 +43,12 @@ class Typespeed < Gosu::Window
       @words << Word.new(@dictionary.sample, 240, self)
     end
 
-    @words.reject!(&:update)
+    @words.reject! do |word|
+      reject = word.update
+      @ref.mark_miss! if reject && !word.user_entered?
+      reject
+    end
+
     @scoreboard.update
   end
 
