@@ -30,20 +30,20 @@ class Typespeed < Gosu::Window
     # end.and_draw do |thingy|
     #   thingy.draw_rot(width / 2, height / 2 + 80, 0, 0)
     # end
-    @last_static_word_at ||= Gosu.milliseconds
-    if delta_since(@last_static_word_at) > 2500 || @word.nil?
-      @word = Gosu::Image.from_text(@dictionary.sample, 36)
-      @last_static_word_at = Gosu.milliseconds
+
+    # create a first word asap
+    unless @last_word_at
+      @last_word_at = @scoreboard.first_word_at = Gosu.milliseconds
+      @words << Word.new(@dictionary.sample, 240, self)
     end
 
-    @last_word_at ||= Gosu.milliseconds
-    @words.reject!(&:update)
+    # usual word generation
     if delta_since(@last_word_at) > 2500
-      word = Word.new(@dictionary.sample, 240, self)
-      @words << word
       @last_word_at = Gosu.milliseconds
+      @words << Word.new(@dictionary.sample, 240, self)
     end
 
+    @words.reject!(&:update)
     @scoreboard.update
   end
 
@@ -51,7 +51,6 @@ class Typespeed < Gosu::Window
     @state_text.draw_rot(width / 2, @state_text.height / 2, 0, 0)
     @cstate_text.draw_rot(width / 2, 40, 0, 0)
     @delta_text.draw_rot(width / 2, 80, 0, 0)
-    @word.draw_rot(width / 2, 120, 0, 0) if @word
 
     @words.map(&:draw)
     @input.draw
