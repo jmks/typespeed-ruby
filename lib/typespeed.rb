@@ -54,6 +54,7 @@ class Typespeed < Gosu::Window
     @word.draw_rot(width / 2, 120, 0, 0) if @word
 
     @words.map(&:draw)
+    @input.draw
     @scoreboard.draw
   end
 
