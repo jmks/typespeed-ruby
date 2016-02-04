@@ -20,53 +20,49 @@ class Typespeed < Gosu::Window
   def update
     delta_time!
 
-    @state_text ||= Gosu::Image.from_text("States are #{states.inspect}", 36)
-    @cstate_text ||= Gosu::Image.from_text("Current state #{state.inspect}", 36)
-    @delta_text = Gosu::Image.from_text("Now: #{Gosu.milliseconds}, delta #{delta}", 36)
-
-    # good api?
-    # every 5.seconds do
-    #   Gosu::Image.from_text("Now: #{Gosu.milliseconds}, delta #{delta}", 36)
-    # end.and_draw do |thingy|
-    #   thingy.draw_rot(width / 2, height / 2 + 80, 0, 0)
-    # end
-
-    # create a first word asap
-    unless @last_word_at
-      @last_word_at = @scoreboard.first_word_at = Gosu.milliseconds
-      @words << Word.new(@dictionary.sample, 240, self)
-    end
-
-    # usual word generation
-    if delta_since(@last_word_at) > 2500
-      @last_word_at = Gosu.milliseconds
-      @words << Word.new(@dictionary.sample, 240, self)
-    end
-
-    @words.reject! do |word|
-      reject = word.update
-      @ref.mark_miss! if reject && !word.user_entered?
-      reject
-    end
-
+    update_words
     @scoreboard.update
   end
 
   def draw
-    @state_text.draw_rot(width / 2, @state_text.height / 2, 0, 0)
-    @cstate_text.draw_rot(width / 2, 40, 0, 0)
-    @delta_text.draw_rot(width / 2, 80, 0, 0)
-
     @words.map(&:draw)
     @input.draw
     @scoreboard.draw
   end
 
-  def button_down id
+  def button_down(id)
     case id
     when Gosu::KbReturn
       @ref.score!
-      puts "User submitted: #{@input.last_submission}"
+    end
+  end
+
+  private
+
+  def update_words
+    generate_words
+    clean_up_words
+  end
+
+  def generate_words
+    if @last_word_at.nil?
+      generate_word
+      @scoreboard.first_word_at = @last_word_at
+    elsif delta_since(@last_word_at) > 2500
+      generate_word
+    end
+  end
+
+  def generate_word
+    @last_word_at = Gosu.milliseconds
+    @words << Word.new(@dictionary.sample, 240, self)
+  end
+
+  def clean_up_words
+    @words.reject! do |word|
+      reject = word.update
+      @ref.mark_miss! if reject && !word.user_entered?
+      reject
     end
   end
 end
