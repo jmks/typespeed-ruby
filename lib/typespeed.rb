@@ -9,19 +9,21 @@ class Typespeed < Gosu::Window
     super
     self.caption = "Typespeed"
 
-    @dictionary = File.open("lib/assets/words.txt").map(&:strip)
+    dictionary = File.open("lib/assets/words.txt").map(&:strip)
     @words = []
 
     @input = UserInput.new(self)
     @ref = Referee.new(@words, @input)
     @scoreboard = Scoreboard.new(@ref)
+    @word_gen = WordGenerator.new(dictionary)
   end
 
   def update
     delta_time!
 
-    update_words
+    clean_up_words
     @scoreboard.update
+    update_words
   end
 
   def draw
@@ -40,22 +42,11 @@ class Typespeed < Gosu::Window
   private
 
   def update_words
-    generate_words
-    clean_up_words
-  end
+    new_word = @word_gen.update
+    return unless new_word
 
-  def generate_words
-    if @last_word_at.nil?
-      generate_word
-      @scoreboard.first_word_at = @last_word_at
-    elsif delta_since(@last_word_at) > 2500
-      generate_word
-    end
-  end
-
-  def generate_word
-    @last_word_at = Gosu.milliseconds
-    @words << Word.new(@dictionary.sample, 240, self)
+    @words << Word.new(new_word, 240, self)
+    @scoreboard.new_word_at @word_gen.last_word_at
   end
 
   def clean_up_words

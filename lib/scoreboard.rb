@@ -2,8 +2,6 @@ class Scoreboard
   DISPLAY_FONT_SIZE = 24
   MARGIN_HORIZONTAL = 15
 
-  attr_accessor :first_word_at
-
   def initialize(referee)
     @ref = referee
     @font = Gosu::Font.new(DISPLAY_FONT_SIZE)
@@ -21,6 +19,10 @@ class Scoreboard
     @font.draw(score_text, 800 - text_width - MARGIN_HORIZONTAL, 600 - DISPLAY_FONT_SIZE, 0, 1, 1, Gosu::Color::GREEN)
     @font.draw(wrong_text, MARGIN_HORIZONTAL, 600 - DISPLAY_FONT_SIZE, 0, 1, 1, Gosu::Color::GREEN)
     @font.draw(miss_text, MARGIN_HORIZONTAL, 600 - DISPLAY_FONT_SIZE - DISPLAY_FONT_SIZE, 0, 1, 1, Gosu::Color::GREEN)
+  end
+
+  def new_word_at(milliseconds)
+    @first_word_at ||= milliseconds
   end
 
   private
