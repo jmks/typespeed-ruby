@@ -42,10 +42,10 @@ class Typespeed < Gosu::Window
   private
 
   def update_words
-    new_word = @word_gen.update
-    return unless new_word
+    @word_gen.update
+    return unless @word_gen.new_word
 
-    @words << Word.new(new_word, 240, self)
+    @words << Word.new(@word_gen.new_word, 240, self)
     @scoreboard.new_word_at @word_gen.last_word_at
   end
 
