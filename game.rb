@@ -1,5 +1,4 @@
 require "gosu"
-require "pry"
 
 require_relative "lib/framework/states"
 require_relative "lib/framework/delta_time"
