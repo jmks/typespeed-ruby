@@ -16,6 +16,7 @@ class Typespeed < Gosu::Window
     @ref = Referee.new(@words, @input)
     @scoreboard = Scoreboard.new(@ref)
     @word_gen = WordGenerator.new(dictionary)
+    @word_placer = WordPlacer.new(self)
   end
 
   def update
@@ -45,7 +46,7 @@ class Typespeed < Gosu::Window
     @word_gen.update
     return unless @word_gen.new_word
 
-    @words << Word.new(@word_gen.new_word, 240, self)
+    @words << Word.new(@word_gen.new_word, @word_placer.next_row, self)
     @scoreboard.new_word_at @word_gen.last_word_at
   end
 
