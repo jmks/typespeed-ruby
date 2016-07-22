@@ -20,6 +20,14 @@ module States
         @registered_states << symbolized_state
 
         self.state = symbolized_state if options[:initial] == symbolized_state || symbolized_state == states.first
+
+        self.send :define_method, :"#{symbolized_state}?" do
+          @current_state == symbolized_state
+        end
+
+        self.send :define_method, :"#{symbolized_state}!" do
+          @current_state = symbolized_state
+        end
       end
     end
     send :alias_method, :register_states, :register_state
