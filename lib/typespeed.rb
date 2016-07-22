@@ -12,16 +12,18 @@ class Typespeed < Gosu::Window
     dictionary = File.open("lib/assets/words.txt").map(&:strip)
     @words = []
 
-    @input = UserInput.new(self)
+    @level = Level.new
+    @input = UserInput.new(self, @level)
     @ref = Referee.new(@words, @input)
     @scoreboard = Scoreboard.new(@ref)
-    @word_gen = WordGenerator.new(dictionary)
+    @word_gen = WordGenerator.new(dictionary, @level)
     @word_placer = WordPlacer.new(self)
   end
 
   def update
     delta_time!
 
+    @level.update(@ref)
     clean_up_words
     @scoreboard.update
     update_words
@@ -46,7 +48,7 @@ class Typespeed < Gosu::Window
     @word_gen.update
     return unless @word_gen.new_word
 
-    @words << Word.new(@word_gen.new_word, @word_placer.next_row, self)
+    @words << Word.new(@word_gen.new_word, @word_placer.next_row, self, speed: @level.word_speed)
     @scoreboard.new_word_at @word_gen.last_word_at
   end
 

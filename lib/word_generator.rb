@@ -2,11 +2,10 @@
 class WordGenerator
   include DeltaTime
 
-  NEW_WORD_AFTER = 2500 # ms
-
   attr_reader :last_word_at, :new_word
 
-  def initialize(dictionary)
+  def initialize(dictionary, level)
+    @level = level
     @last_word_at = 0
     @dictionary = dictionary
     @new_word = nil
@@ -20,7 +19,7 @@ class WordGenerator
   private
 
   def new_word?
-    @last_word_at.zero? || delta_since(@last_word_at) >= NEW_WORD_AFTER
+    @last_word_at.zero? || delta_since(@last_word_at) >= @level.word_delay
   end
 
   def generate_word

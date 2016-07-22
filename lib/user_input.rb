@@ -3,8 +3,9 @@ class UserInput
 
   attr_reader :last_submission
 
-  def initialize(game)
+  def initialize(game, level)
     @game = game
+    @level = level
     @game.text_input = @input = build_input
     @last_submission = ""
     @display = Gosu::Font.new(DISPLAY_FONT_SIZE)
@@ -17,7 +18,9 @@ class UserInput
   end
 
   def draw
-    @display.draw(input_text, 400 - input_width / 2, 600 - DISPLAY_FONT_SIZE, 0, 1, 1, Gosu::Color::GREEN)
+    if @level.typing_visible?
+      @display.draw(input_text, 400 - input_width / 2, 600 - DISPLAY_FONT_SIZE, 0, 1, 1, Gosu::Color::GREEN)
+    end
   end
 
   private
