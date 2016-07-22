@@ -31,7 +31,7 @@ class Typespeed < Gosu::Window
 
     @level.update(@ref)
     clean_up_words
-    @scoreboard.update
+    @scoreboard.update unless game_over?
     update_words
   end
 
