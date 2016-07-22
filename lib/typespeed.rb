@@ -39,7 +39,7 @@ class Typespeed < Gosu::Window
     @words.map(&:draw)
     @input.draw
     @scoreboard.draw
-    @game_over.draw(@game_over_text, 800 / 2 - @game_over.text_width(@game_over_text) / 2, 600 / 2, 0, 1, 1, Gosu::Color::RED) if game_over?
+    @game_over.draw(@game_over_text, 800 / 2 - @game_over.text_width(@game_over_text) / 2, 600 / 2 - 24, 0, 1, 1, Gosu::Color::RED) if game_over?
   end
 
   def button_down(id)
