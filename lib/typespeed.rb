@@ -3,7 +3,7 @@ class Typespeed < Gosu::Window
   include States
   include DeltaTime
 
-  register_states :splash, :playing, :gameover
+  register_states :splash, :playing, :game_over
 
   def initialize(width = 800, height = 600, fullscreen = false)
     super
@@ -18,10 +18,16 @@ class Typespeed < Gosu::Window
     @scoreboard = Scoreboard.new(@ref)
     @word_gen = WordGenerator.new(dictionary, @level)
     @word_placer = WordPlacer.new(self)
+
+    @game_over = Gosu::Font.new(48)
+    @game_over_text = "Game Over!!"
   end
 
   def update
     delta_time!
+
+    update_game_state!
+    @input.kill_input! if game_over?
 
     @level.update(@ref)
     clean_up_words
@@ -33,9 +39,12 @@ class Typespeed < Gosu::Window
     @words.map(&:draw)
     @input.draw
     @scoreboard.draw
+    @game_over.draw(@game_over_text, 800 / 2 - @game_over.text_width(@game_over_text) / 2, 600 / 2, 0, 1, 1, Gosu::Color::RED) if game_over?
   end
 
   def button_down(id)
+    return if game_over?
+
     case id
     when Gosu::KbReturn
       @ref.score!
@@ -58,5 +67,11 @@ class Typespeed < Gosu::Window
       @ref.mark_miss! if reject && !word.user_entered?
       reject
     end
+  end
+
+  def update_game_state!
+    return if game_over?
+
+    game_over! if @ref.game_over?
   end
 end

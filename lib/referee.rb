@@ -1,4 +1,6 @@
 class Referee
+  MISSES_TO_GAME_OVER = 3
+
   attr_reader :submissions, :correct, :incorrect, :misses
 
   def initialize(words, user_input)
@@ -30,5 +32,9 @@ class Referee
 
   def mark_miss!
     @misses += 1
+  end
+
+  def game_over?
+    misses >= MISSES_TO_GAME_OVER
   end
 end
